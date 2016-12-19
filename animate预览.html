@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+	<style type="text/css">
+		.box{
+			width: 100px;
+			height: 100px;
+			background-color: #FEA515;
+			position: relative;
+			color: #fff;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+        animate
+	</div>
+	<button>开始</button>
+	<button>重置</button>
+	<script type="text/javascript">
+		var $startBtn = $('button').eq(0);
+        var $resetBtn = $('button').eq(1);
+        var $div = $('.box');
+		$startBtn.on('click',function(){
+			$div.animate({
+				left: '500px',
+				top: '200px',
+                width: '300px',
+                height: '300px'
+			},'slow');
+			$div.animate({
+				lineHeight: '300px',
+				fontSize: '2em'
+			},'slow')
+		})
+		$resetBtn.on('click',function(){
+            $div.animate({
+            	width: '100px',
+			    height: '100px',
+			    left: '0',
+			    top: '0',
+			    fontSize: '1em',
+			    lineHeight: '100px'
+            },'slow')
+		})
+	</script>
+</body>
+</html>
