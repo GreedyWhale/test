@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div,img,ul,li,a{
+			padding: 0;
+			margin: 0;
+			list-style: none;
+			text-decoration: none;
+			box-sizing: border-box;
+		}
+		.clearfix::after{
+			content: '';
+			display: block;
+			clear: both;
+		}
+		.img-ct{
+			width: 940px;
+			margin-right: auto;
+			margin-left: auto;
+		}
+		.img-ct>ul{
+			margin-right: -20px;
+		}
+		.img-ct>ul>li{
+			float: left;
+			border: 1px solid #000;
+			width: 300px;
+			height: 300px;
+			margin-right: 20px;
+			margin-bottom: 20px;
+		}
+		.img-ct>ul>li img{
+			width: 298px;
+			height: 298px;
+		}
+		.hide{
+			height: 20px;			
+		}
+	</style>
+	<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+	<div class="img-ct">
+		<ul class="clearfix">
+		</ul>
+		<div class='hide'></div>
+	</div>
+    <script>
+    	function LazyLoad(){
+    		this.init = function(){
+    			this.referencePoint = $('.img-ct .hide');
+    			this.data = [
+    			             'http://imgs.aixifan.com/live/1487597946154/1487597946154.png',
+    			             'http://imgs.aixifan.com/live/1487597933085/1487597933085.jpg',
+    			             'http://imgs.aixifan.com/live/1485502791959/1485502791959.png',
+    			             'http://imgs.aixifan.com/live/1485502794294/1485502794294.jpg',
+    			             'http://imgs.aixifan.com/live/1485502813214/1485502813214.jpg',
+    			             'http://imgs.aixifan.com/live/1484128032428/1484128032428.jpg',
+    			             'http://imgs.aixifan.com/live/1484128023911/1484128023911.jpg',
+    			             'http://imgs.aixifan.com/live/1484128078769/1484128078769.jpg',
+    			             'http://imgs.aixifan.com/live/1484128111773/1484128111773.jpg',
+    			             'http://imgs.aixifan.com/live/1484128147427/1484128147427.png',
+    			             'http://imgs.aixifan.com/live/1484128240776/1484128240776.jpg',
+    			             'http://imgs.aixifan.com/live/1484128294770/1484128294770.jpg'
+    			             ];
+    		}
+    		this.num = 7;
+    		this.len = 0;
+    		this.bind = function(){
+    			var that = this
+    			$(window).on('scroll',function(){
+    				var lock;
+    				if(lock){
+	                	clearTimeout(lock);
+		            }
+	                lock = setTimeout(function(){
+	                	that.render();
+	                },500)
+    			})
+    		}
+    		this.render = function(){
+    			if(this.checkShow()){
+    				if(this.num <= 12){
+    					var ul = $('.img-ct ul');
+	    				var html = '';
+						for(var i = 0;i<this.data.length;i++){
+						    html += '<li class="img-items">';
+						    html += '<a href="">';
+						    html += '<img src=' +this.data[i]+ '>';
+						    html += '</a>';
+						    html += '</li>'
+					    }
+	    				ul.append(html);
+	    				this.num += 5;
+	    				this.len += 8;
+    				}else{
+    					this.num = 7;
+    					this.len = 0;
+    					var ul = $('.img-ct ul');
+	    				var html = '';
+						for(var i = 0;i<this.data.length;i++){
+						    html += '<li class="img-items">';
+						    html += '<a href="">';
+						    html += '<img src=' +this.data[i]+ '>';
+						    html += '</a>';
+						    html += '</li>'
+					    }
+	    				ul.append(html);
+    				} 
+    			}
+    		}
+    		this.checkShow = function(){
+    			var scrollHeight = $(window).scrollTop();
+	    		var windowHeight = $(window).height();
+	    		var offset = this.referencePoint.offset().top;
+    			if(offset <= (scrollHeight + windowHeight)){
+    				return true;
+    			}else{
+    				return false;
+    			}
+    		}
+    		this.init();
+    		this.bind();
+    		this.render();
+    	}
+    	var lazy = new LazyLoad();
+    </script>
+</body>
+</html>
