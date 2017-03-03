@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+			list-style: none;
+			box-sizing: border-box;
+		}
+		.clearfix::after{
+			content: '';
+			display: block;
+			clear: both;
+		}
+		.img-ct{
+			width: 1200px;
+			margin: 0 auto;
+		}
+		.img-ct>li{
+			float: left;
+		}
+	</style>
+</head>
+<body>
+	<ul class="img-ct clearfix">		
+	</ul>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+		function Barrel($ele){
+			this.init = function(){
+				this.ct = $ele;
+				this.baseHeight = 100;
+                this.maxWidth = $ele.width();
+                this.lastRowWidth = 0;
+                this.imgList = [];
+                this.data = [
+				             'images/1.jpg',
+				             'images/2.jpeg',
+				             'images/3.jpeg',
+				             'images/4.jpeg',
+				             'images/5.jpeg',
+				             'images/6.jpeg',
+				             'images/7.jpeg',
+				             'images/8.jpg',
+				             'images/9.jpeg',
+				             'images/10.jpeg',
+				             'images/11.jpg',
+				             'images/12.jpg'
+				            ];
+			}
+			Barrel.prototype.createImg = function(){
+				var _this = this,
+				    num = 0;
+                $.each(_this.data,function(i,url){
+                    var img = new Image();
+                    img.src = url;
+                    img.onload = function(){
+                    	var imgWidth = img.width,
+                    	    imgHeight = img.height,
+                    	    proportion = imgWidth/imgHeight,
+                            imgInfo = {
+                            	self: $(img),
+                            	width: _this.baseHeight*proportion,
+                            	height: _this.baseHeight
+                            }
+                    	_this.render(imgInfo,num)
+                    	num++
+                    }
+                })
+			}
+			Barrel.prototype.render = function(imgInfo,num){
+                var _this = this;
+                    rowHeight = _this.lastRowWidth,
+                    rowWidth = 0,
+                    lastImg = imgInfo,
+                    temArr = [],
+                    _this.imgList.push(imgInfo);
+                    $.each(_this.imgList,function(index,value){
+                        rowWidth += value.width; 
+                        if(rowWidth>_this.maxWidth){
+                        	_this.imgList.pop();
+                        	rowWidth -= lastImg.width;
+                        	rowHeight = _this.maxWidth * _this.baseHeight / rowWidth;
+                        	_this.createRow(rowHeight);
+                        	_this.imgList = [];
+                        	rowWidth = 0;
+                        	_this.imgList.push(lastImg);
+                        }
+                    })
+                    if(num === _this.data.length-1 && _this.imgList.length != 0){
+                    	temArr = _this.imgList;
+                    	$.each(temArr,function(index,value){
+                    		rowWidth += value.width;
+                    		rowHeight = _this.maxWidth * _this.baseHeight / rowWidth;
+                    		
+                    	})
+                    	_this.createRow(rowHeight);
+                    	_this.lastRowWidth = rowWidth;
+                    }
+			}
+			Barrel.prototype.createRow = function(num){
+				var row = $('<li></li>'),
+				    div = $('<div></div>')
+				    _this = this;
+				    div.height(num);
+				$.each(_this.imgList,function(index,imgInfo){
+                    var $img = imgInfo.self;
+                    $img.height(num);
+                    div.append($img)
+                    row.append(div);
+				})
+				_this.ct.append(row);
+			}
+			this.init();
+			this.createImg();
+
+		}
+			var ct = $('.img-ct')
+		    var barrel = new Barrel(ct)
+
+	</script>
+</body>
+</html>
